@@ -27,6 +27,7 @@ import { Readable } from "stream";
 import { panic, assert, defined, withDefault } from "./Support";
 import { introspectServer } from "./GraphQLIntrospection";
 import { getStream } from "./get-stream/index";
+import { train } from "./MarkovChain";
 
 const commandLineArgs = require("command-line-args");
 const getUsage = require("command-line-usage");
@@ -49,6 +50,7 @@ export interface CLIOptions {
     graphqlServerHeader?: string[];
     template?: string;
     out?: string;
+    buildMarkovChain?: string;
 
     noMaps: boolean;
     noEnums: boolean;
@@ -237,6 +239,7 @@ function inferOptions(opts: Partial<CLIOptions>): CLIOptions {
         quiet: opts.quiet || false,
         version: opts.version || false,
         out: opts.out,
+        buildMarkovChain: opts.buildMarkovChain,
         graphqlSchema: opts.graphqlSchema,
         graphqlIntrospect: opts.graphqlIntrospect,
         graphqlServerHeader: opts.graphqlServerHeader,
@@ -339,6 +342,12 @@ const optionDefinitions: OptionDefinition[] = [
         description: "Alphabetize order of class properties."
     },
     {
+        name: "build-markov-chain",
+        type: String,
+        typeLabel: "FILE",
+        description: "Markov chain corpus filename."
+    },
+    {
         name: "quiet",
         type: Boolean,
         description: "Don't show issues in the generated code."
@@ -376,7 +385,7 @@ const sectionsBeforeRenderers: UsageSection[] = [
     {
         header: "Options",
         optionList: optionDefinitions,
-        hide: ["no-render"]
+        hide: ["no-render", "build-markov-chain"]
     }
 ];
 
@@ -518,6 +527,13 @@ export async function main(args: string[] | Partial<CLIOptions>) {
         if (options.version) {
             console.log(`quicktype version ${packageJSON.version}`);
             console.log("Visit quicktype.io for more info.");
+            return;
+        }
+        if (options.buildMarkovChain !== undefined) {
+            const contents = fs.readFileSync(options.buildMarkovChain).toString();
+            const lines = contents.split("\n");
+            const mc = train(lines, 3);
+            console.log(JSON.stringify(mc));
             return;
         }
 
