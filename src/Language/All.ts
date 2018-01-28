@@ -8,7 +8,7 @@ import CPlusPlusTargetLanguage from "./CPlusPlus";
 import ObjectiveCTargetLanguage from "./Objective-C";
 import JavaTargetLanguage from "./Java";
 import SimpleTypesTargetLanguage from "./SimpleTypes";
-import PythonLanguage from "./Python";
+import PythonTargetLanguage from "./Python";
 import TypeScriptTargetLanguage from "./TypeScript";
 import SwiftTargetLanguage from "./Swift";
 import ElmTargetLanguage from "./Elm";
