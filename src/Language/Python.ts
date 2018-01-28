@@ -38,7 +38,7 @@ export default class SimpleTypesTargetLanguage extends TargetLanguage {
     private readonly _declareUnionsOption = new BooleanOption("declare-unions", "Declare unions as named types", false);
 
     constructor() {
-        super("Simple Types", ["types"], "txt");
+        super("Python", ["python"], "py");
         this.setOptions([this._declareUnionsOption]);
     }
 
