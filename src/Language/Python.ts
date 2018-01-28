@@ -147,13 +147,17 @@ class PythonTypesRenderer extends ConvenienceRenderer {
     };
 
     private emitClass = (c: ClassType, className: Name) => {
-        this.emitLine("class ", className, " {");
+        this.emitLine("class ", className, "(object):");
         this.indent(() => {
-            this.forEachClassProperty(c, "none", (name, _jsonName, p) => {
-                this.emitLine(name, p.isOptional ? "?" : "", ": ", this.sourceFor(p.type));
+            this.emitLine("def __init__(self):");
+        });
+        this.indent(() => {
+            this.forEachClassProperty(c, "none", (name, _jsonName) => {
+                this.indent(() => {
+                    this.emitLine("self.", name, " = ", name);
+                });
             });
         });
-        this.emitLine("}");
     };
 
     emitEnum = (e: EnumType, enumName: Name) => {
