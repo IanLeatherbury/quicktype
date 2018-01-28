@@ -8,6 +8,7 @@ import CPlusPlusTargetLanguage from "./CPlusPlus";
 import ObjectiveCTargetLanguage from "./Objective-C";
 import JavaTargetLanguage from "./Java";
 import SimpleTypesTargetLanguage from "./SimpleTypes";
+import PythonLanguage from "./Python";
 import TypeScriptTargetLanguage from "./TypeScript";
 import SwiftTargetLanguage from "./Swift";
 import ElmTargetLanguage from "./Elm";
@@ -23,7 +24,8 @@ export const all: TargetLanguage[] = [
     new SwiftTargetLanguage(),
     new ElmTargetLanguage(),
     new JSONSchemaTargetLanguage(),
-    new SimpleTypesTargetLanguage()
+    new SimpleTypesTargetLanguage(),
+    new PythonTargetLanguage()
 ];
 
 export function languageNamed(name: string): TargetLanguage | undefined {
