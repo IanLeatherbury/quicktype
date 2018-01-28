@@ -34,7 +34,7 @@ import { StringTypeMapping } from "../TypeBuilder";
 
 const unicode = require("unicode-properties");
 
-export default class SimpleTypesTargetLanguage extends TargetLanguage {
+export default class PythonTargetLanguage extends TargetLanguage {
     private readonly _declareUnionsOption = new BooleanOption("declare-unions", "Declare unions as named types", false);
 
     constructor() {
@@ -55,7 +55,7 @@ export default class SimpleTypesTargetLanguage extends TargetLanguage {
         leadingComments: string[] | undefined,
         ...optionValues: any[]
     ) => ConvenienceRenderer {
-        return SimpleTypesRenderer;
+        return PythonTypesRenderer;
     }
 }
 
@@ -84,7 +84,7 @@ function simpleNameStyle(original: string, uppercase: boolean): string {
     );
 }
 
-class SimpleTypesRenderer extends ConvenienceRenderer {
+class PythonTypesRenderer extends ConvenienceRenderer {
     constructor(graph: TypeGraph, leadingComments: string[] | undefined, private readonly inlineUnions: boolean) {
         super(graph, leadingComments);
     }
