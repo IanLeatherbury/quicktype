@@ -120,11 +120,11 @@ class PythonTypesRenderer extends ConvenienceRenderer {
                 return panic("None type should have been replaced");
             },
             _anyType => "Any",
-            _nullType => "Null",
-            _boolType => "Bool",
-            _integerType => "Int",
-            _doubleType => "Double",
-            _stringType => "String",
+            _nullType => "None",
+            _boolType => "bool",
+            _integerType => "int",
+            _doubleType => "float",
+            _stringType => "str",
             arrayType => ["List<", this.sourceFor(arrayType.items), ">"],
             classType => this.nameForNamedType(classType),
             mapType => ["Map<String, ", this.sourceFor(mapType.values), ">"],
@@ -140,9 +140,9 @@ class PythonTypesRenderer extends ConvenienceRenderer {
                     return this.nameForNamedType(unionType);
                 }
             },
-            _dateType => "Date",
-            _timeType => "Time",
-            _dateTimeType => "DateTime"
+            _dateType => "date",
+            _timeType => "time",
+            _dateTimeType => "datetime"
         );
     };
 
