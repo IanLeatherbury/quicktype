@@ -184,4 +184,11 @@ class PythonTypesRenderer extends ConvenienceRenderer {
             this.callForNamedType(t, f);
         });
     }
+
+    protected emitSourceStructure() {
+        if (this.leadingComments !== undefined) {
+            this.emitCommentLines("// ", this.leadingComments);
+        }
+        this.forEachClass("leading-and-interposing", this.emitClass);
+    }
 }
