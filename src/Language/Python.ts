@@ -130,13 +130,13 @@ class PythonTypesRenderer extends ConvenienceRenderer {
             _integerType => "int",
             _doubleType => "float",
             _stringType => "str",
-            arrayType => ["list<", this.sourceFor(arrayType.items), ">"],
+            arrayType => ["list[", this.sourceFor(arrayType.items), "]"],
             classType => this.nameForNamedType(classType),
-            mapType => ["Map<String, ", this.sourceFor(mapType.values), ">"],
+            mapType => ["Map[str, ", this.sourceFor(mapType.values), "]"],
             enumType => this.nameForNamedType(enumType),
             unionType => {
                 const nullable = nullableFromUnion(unionType);
-                if (nullable !== null) return ["Maybe<", this.sourceFor(nullable), ">"];
+                if (nullable !== null) return ["Maybe[", this.sourceFor(nullable), "]"];
 
                 if (this.inlineUnions) {
                     const children = unionType.children.map((c: Type) => this.sourceFor(c));
