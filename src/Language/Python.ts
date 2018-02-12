@@ -151,9 +151,9 @@ class PythonTypesRenderer extends ConvenienceRenderer {
         this.indent(() => {
             this.emitLine("def __init__(self");
             this.indent(() => {
-                this.forEachClassProperty(c, "none", (name, _jsonName) => {
+                this.forEachClassProperty(c, "none", (name, _jsonName, p) => {
                     this.indent(() => {
-                        this.emitLine(name, ",");
+                        this.emitLine(name, ": ", this.sourceFor(p.type), ",");
                     });
                 });
                 this.emitLine("):");
