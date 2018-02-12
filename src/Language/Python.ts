@@ -125,7 +125,7 @@ class PythonTypesRenderer extends ConvenienceRenderer {
             _integerType => "int",
             _doubleType => "float",
             _stringType => "str",
-            arrayType => ["List<", this.sourceFor(arrayType.items), ">"],
+            arrayType => ["list<", this.sourceFor(arrayType.items), ">"],
             classType => this.nameForNamedType(classType),
             mapType => ["Map<String, ", this.sourceFor(mapType.values), ">"],
             enumType => this.nameForNamedType(enumType),
@@ -169,22 +169,24 @@ class PythonTypesRenderer extends ConvenienceRenderer {
     };
 
     emitEnum = (e: EnumType, enumName: Name) => {
-        const caseNames: Sourcelike[] = [];
-        this.forEachEnumCase(e, "none", name => {
-            if (caseNames.length > 0) caseNames.push(" | ");
-            caseNames.push(name);
+        this.emitLine("class ", enumName, "(Enum):");
+        let count = 0;
+        this.indent(() => {
+            this.forEachEnumCase(e, "none", name => {
+                this.emitLine(name, " = ", (count++).toString());
+            });
         });
-        this.emitLine("enum ", enumName, " = ", caseNames);
+        this.emitLine();
     };
 
     emitUnion = (u: UnionType, unionName: Name) => {
-        this.emitLine("union ", unionName, " {");
+        this.emitLine(unionName, " = Union[");
         this.indent(() => {
             this.forEach(u.members, false, false, (t: Type) => {
-                this.emitLine("case ", this.sourceFor(t));
+                this.emitLine(this.sourceFor(t), ",");
             });
         });
-        this.emitLine("}");
+        this.emitLine("]");
     };
 
     protected emitSourceStructure() {
