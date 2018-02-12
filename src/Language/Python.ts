@@ -2,9 +2,12 @@
 
 import * as _ from "lodash";
 
+import { Set, List, Map, OrderedMap, OrderedSet, Collection } from "immutable";
+
 import {
     Type,
     EnumType,
+    NamedType,
     UnionType,
     ClassType,
     nullableFromUnion,
@@ -27,6 +30,8 @@ import { intercalate, panic } from "../Support";
 import { Namer, Name } from "../Naming";
 
 import { ConvenienceRenderer } from "../ConvenienceRenderer";
+
+import { Renderer, RenderResult, BlankLineLocations } from "../Renderer";
 
 import { TargetLanguage } from "../TargetLanguage";
 import { BooleanOption } from "../RendererOptions";
@@ -188,6 +193,18 @@ class PythonTypesRenderer extends ConvenienceRenderer {
         });
         this.emitLine("]");
     };
+
+    // Have to reverse class order because Python will not reference a type
+    // before it is declared
+    protected forEachSpecificNamedType<T extends NamedType>(
+        blankLocations: BlankLineLocations,
+        types: OrderedSet<T>,
+        f: (t: T, name: Name) => void
+    ): void {
+        this.forEachWithBlankLines(types.reverse(), blankLocations, t => {
+            this.callForNamedType(t, f);
+        });
+    }
 
     protected emitSourceStructure() {
         if (this.leadingComments !== undefined) {
