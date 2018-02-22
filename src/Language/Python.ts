@@ -31,7 +31,7 @@ import { intercalate, panic } from "../Support";
 
 import { Namer, Name } from "../Naming";
 
-import { ConvenienceRenderer } from "../ConvenienceRenderer";
+import { ConvenienceRenderer, ForbiddenWordsInfo } from "../ConvenienceRenderer";
 
 import { Renderer, RenderResult, BlankLineLocations } from "../Renderer";
 
@@ -75,6 +75,8 @@ function isPartCharacter(utf16Unit: number): boolean {
     return _.includes(["Nd", "Pc", "Mn", "Mc"], category) || isStartCharacter(utf16Unit);
 }
 
+const forbiddenNames = ["type"];
+
 const legalizeName = legalizeCharacters(cp => isAscii(cp) && isLetterOrUnderscoreOrDigit(cp));
 
 function pythonNameStyle(original: string, uppercase: boolean): string {
@@ -96,6 +98,10 @@ class PythonTypesRenderer extends ConvenienceRenderer {
         super(graph, leadingComments);
     }
 
+    protected get forbiddenNamesForGlobalNamespace(): string[] {
+        return forbiddenNames;
+    }
+
     protected topLevelNameStyle(rawName: string): string {
         return pythonNameStyle(rawName, true);
     }
@@ -106,6 +112,10 @@ class PythonTypesRenderer extends ConvenienceRenderer {
 
     protected namerForClassProperty(): Namer {
         return new Namer("properties", n => pythonNameStyle(n, false), []);
+    }
+
+    protected forbiddenForClassProperties(_c: ClassType, _className: Name): ForbiddenWordsInfo {
+        return { names: [], includeGlobalForbidden: true };
     }
 
     protected makeUnionMemberNamer(): null {
