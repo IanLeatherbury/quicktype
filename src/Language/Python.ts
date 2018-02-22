@@ -75,7 +75,7 @@ function isPartCharacter(utf16Unit: number): boolean {
     return _.includes(["Nd", "Pc", "Mn", "Mc"], category) || isStartCharacter(utf16Unit);
 }
 
-const forbiddenNames = ["type"];
+const forbiddenNames = ["type", "id"];
 
 const legalizeName = legalizeCharacters(cp => isAscii(cp) && isLetterOrUnderscoreOrDigit(cp));
 
@@ -148,7 +148,7 @@ class PythonTypesRenderer extends ConvenienceRenderer {
             enumType => this.nameForNamedType(enumType),
             unionType => {
                 const nullable = nullableFromUnion(unionType);
-                if (nullable !== null) return ["Maybe[", this.sourceFor(nullable), "]"];
+                if (nullable !== null) return ["Optional[", this.sourceFor(nullable), "]"];
 
                 if (this.inlineUnions) {
                     const children = unionType.children.map((c: Type) => this.sourceFor(c));
