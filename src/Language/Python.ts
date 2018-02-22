@@ -185,6 +185,27 @@ class PythonTypesRenderer extends ConvenienceRenderer {
         });
     };
 
+    emitEnum = (e: EnumType, enumName: Name) => {
+        this.emitLine("class ", enumName, "(Enum):");
+        let count = 0;
+        this.indent(() => {
+            this.forEachEnumCase(e, "none", name => {
+                this.emitLine(name, " = ", (count++).toString());
+            });
+        });
+        this.emitLine();
+    };
+
+    emitUnion = (u: UnionType, unionName: Name) => {
+        this.emitLine(unionName, " = Union[");
+        this.indent(() => {
+            this.forEach(u.members, false, false, (t: Type) => {
+                this.emitLine(this.sourceFor(t), ",");
+            });
+        });
+        this.emitLine("]");
+    };
+
     // Have to reverse class order because Python will not reference a type
     // before it is declared
     protected forEachSpecificNamedType<T extends NamedType>(
@@ -199,8 +220,9 @@ class PythonTypesRenderer extends ConvenienceRenderer {
 
     protected emitSourceStructure() {
         if (this.leadingComments !== undefined) {
-            this.emitCommentLines("// ", this.leadingComments);
+            this.emitCommentLines("# ", this.leadingComments);
         }
-        this.forEachClass("leading-and-interposing", this.emitClass);
+
+        this.forEachNamedType("leading-and-interposing", this.emitClass, this.emitEnum);
     }
 }
