@@ -23,7 +23,9 @@ import {
     combineWords,
     firstUpperWordStyle,
     allUpperWordStyle,
-    allLowerWordStyle
+    allLowerWordStyle,
+    isAscii,
+    isLetterOrUnderscoreOrDigit
 } from "../Strings";
 import { intercalate, panic } from "../Support";
 
@@ -73,7 +75,7 @@ function isPartCharacter(utf16Unit: number): boolean {
     return _.includes(["Nd", "Pc", "Mn", "Mc"], category) || isStartCharacter(utf16Unit);
 }
 
-const legalizeName = legalizeCharacters(isPartCharacter);
+const legalizeName = legalizeCharacters(cp => isAscii(cp) && isLetterOrUnderscoreOrDigit(cp));
 
 function simpleNameStyle(original: string, uppercase: boolean): string {
     const words = splitIntoWords(original);
