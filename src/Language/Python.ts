@@ -77,7 +77,7 @@ function isPartCharacter(utf16Unit: number): boolean {
 
 const legalizeName = legalizeCharacters(cp => isAscii(cp) && isLetterOrUnderscoreOrDigit(cp));
 
-function simpleNameStyle(original: string, uppercase: boolean): string {
+function pythonNameStyle(original: string, uppercase: boolean): string {
     const words = splitIntoWords(original);
     return combineWords(
         words,
@@ -97,15 +97,15 @@ class PythonTypesRenderer extends ConvenienceRenderer {
     }
 
     protected topLevelNameStyle(rawName: string): string {
-        return simpleNameStyle(rawName, true);
+        return pythonNameStyle(rawName, true);
     }
 
     protected makeNamedTypeNamer(): Namer {
-        return new Namer("types", n => simpleNameStyle(n, true), []);
+        return new Namer("types", n => pythonNameStyle(n, true), []);
     }
 
     protected namerForClassProperty(): Namer {
-        return new Namer("properties", n => simpleNameStyle(n, false), []);
+        return new Namer("properties", n => pythonNameStyle(n, false), []);
     }
 
     protected makeUnionMemberNamer(): null {
@@ -113,7 +113,7 @@ class PythonTypesRenderer extends ConvenienceRenderer {
     }
 
     protected makeEnumCaseNamer(): Namer {
-        return new Namer("enum-cases", n => simpleNameStyle(n, true), []);
+        return new Namer("enum-cases", n => pythonNameStyle(n, true), []);
     }
 
     protected namedTypeToNameForTopLevel(type: Type): Type | undefined {
